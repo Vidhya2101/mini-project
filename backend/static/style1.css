@@ -1,0 +1,77 @@
+body {
+  font-family: Arial;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.header {
+  background: rgba(255,255,255,0.8);
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+  border-bottom: 4px solid #2e7d32;
+}
+
+.user-box {
+  background: rgba(255,255,255,0.9);
+  margin: 10px;
+  padding: 10px;
+  border-left: 5px solid #2e7d32;
+  font-size: 18px;
+}
+
+.account-info {
+  position: center;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.95);
+  padding: 50px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+form {
+  margin: 20px;
+  padding: 20px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 10px;
+  max-width: 600px;
+}
+
+input, select, button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+button {
+  background: #2e7d32;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1b5e20;
+}
+
+.leaderboard {
+  margin: 20px;
+  padding: 20px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+}
+
+.suggestion-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.suggestion-box li {
+  padding: 5px 0;
+  font-size: 16px;
+}

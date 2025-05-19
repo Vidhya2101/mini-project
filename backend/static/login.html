@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Carbon Footprint Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+ 
+
+</head>
+
+<body style="background-image: url('earth.jpg');">
+  <centre>
+  <div class="header"><h1>🌍 Carbon Footprint Tracker</h1></div>
+  <div class="account-info">
+    <form id="loginForm">
+      <h2>🌍Welcome!Hop on🌍</h2>
+      <input type="text" id="name" placeholder="Nickname" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required />
+      <button type="submit">Register</button>
+    </form>
+   
+  </div>
+  </centre>
+  <script>
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+    };
+
+    try {
+      const res = await fetch("http://localhost:5000/submit_login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        // Redirect to activity page, pass email as query param
+        window.location.href = `activity.html?email=${encodeURIComponent(data.email)}`;
+      } else {
+        alert("Failed to submit login info.");
+      }
+    } catch (err) {
+      alert("Error submitting login.");
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>

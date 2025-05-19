@@ -1,0 +1,6 @@
+activity,unit,emission_factor
+car,km,0.192
+bus,km,0.105
+bike,km,0.072
+phone,hours,0.012
+laptop,hours,0.04

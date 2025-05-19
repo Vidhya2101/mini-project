@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Emission Results</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<script>
+  async function fetchResults(email) {
+    try {
+      const response = await fetch(`/get_results?email=${email}`);
+      const data = await response.json();
+
+      if (data.status === "success") {
+        // ✅ Show total emissions
+        const total = data.total_emission;
+        const name = data.name;
+        const date = data.date;
+
+
+
+       // ✅ Pie Chart
+const ctxPie = document.getElementById("pieChart").getContext("2d");
+new Chart(ctxPie, {
+  type: "pie",
+  data: {
+    labels: Object.keys(data.emissions).filter(key => key !== "Total"),
+    datasets: [{
+      data: Object.entries(data.emissions)
+                 .filter(([key]) => key !== "Total")
+                 .map(([, value]) => value),
+      backgroundColor: ["#4CAF50", "#FF9800", "#2196F3"],
+    }],
+  },
+  options: {
+    responsive: false,
+    maintainAspectRatio: false,
+    width: 200,
+    height: 200,
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+    },
+  }
+});
+
+
+        // ✅ Line Chart
+        const ctxLine = document.getElementById("lineChart").getContext("2d");
+        new Chart(ctxLine, {
+          type: "line",
+          data: {
+            labels: data.history.map(entry => entry.date),
+            datasets: [{
+              label: "Total Emission (kg CO₂)",
+              data: data.history.map(entry => entry.total_emission),
+              borderColor: "#3e95cd",
+              fill: false,
+            }],
+          },
+        });
+
+        // ✅ Tree recommendation
+        document.getElementById("recommendation").innerText =
+          `🌳 You should plant ${data.trees_to_plant} tree(s) to offset today's carbon footprint.`;
+      } else {
+        alert("Error fetching results.");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const email = urlParams.get('email');
+
+  if (email) {
+    fetchResults(email);
+  } else {
+    console.error("No email provided in URL");
+  }
+</script>
+
+
+<body style="background-image: url('earth.jpg');">
+  <div class="header"><h1>📊 Your Carbon Emission Summary</h1></div>
+   
+ 
+
+  <div style="margin-top: 20px;">
+    <h3 align="center">Emission Breakdown</h3>
+    <div class="chart-container"><canvas id="pieChart" width="250" height="250"></canvas></div>
+
+    <h3 align="center">Your Progress</centre>
+    <div class="chart-container"><div style="width: 400px; height: 300px; background: white; padding: 10px; border-radius: 10px;">
+  <canvas id="lineChart"></canvas>
+</div></div>
+
+
+    <div id="recommendation" style="background-color: #d4edda; padding: 10px; border-radius: 8px; color: #155724;"></div>
+  </div>
+
+  
+
+</body>
+</html>

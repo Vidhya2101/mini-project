@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Activity</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body style="background-image: url('earth.jpg');">
+  <div class="header"><h1>🌍 Carbon Footprint Tracker</h1></div>
+ 
+  <div class="activity-container">
+  <form id="activityForm">
+    <!-- These will be filled from URL params -->
+    <input type="hidden" id="name" />
+    <input type="hidden" id="email" />
+    <input type="hidden" id="phone" />
+
+    <label for="distance">Distance Travelled (km):</label>
+    <input type="number" id="distance" required />
+
+    <label for="transport">Transport Mode:</label>
+    <select id="transport" required>
+      <option value="car">Car</option>
+      <option value="bus">Bus</option>
+      <option value="bike">Bike</option>
+    </select>
+
+    <label for="phoneUsage">Phone Usage (hrs):</label>
+    <input type="number" id="phoneUsage" required />
+
+    <label for="laptopUsage">Laptop Usage (hrs):</label>
+    <input type="number" id="laptopUsage" required />
+
+    <button type="submit">Submit</button>
+  </form>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get("name");
+    const email = urlParams.get("email");
+    const phone = urlParams.get("phone");
+
+    if (!email) {
+      alert("No user email found. Please login first.");
+      window.location.href = "login.html";
+    }
+
+    // Set hidden fields (optional)
+    document.getElementById("name").value = name || "";
+    document.getElementById("email").value = email || "";
+    document.getElementById("phone").value = phone || "";
+
+    document.getElementById("activityForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const transport = document.getElementById("transport").value;
+      const distance = Number(document.getElementById("distance").value);
+
+      // Transport split
+      let car_km = 0, bus_km = 0, bike_km = 0;
+      if (transport === "car") car_km = distance;
+      else if (transport === "bus") bus_km = distance;
+      else if (transport === "bike") bike_km = distance;
+
+       const data = {
+    name,
+    email,
+    phone,
+    car_km,
+    bus_km,
+    bike_km,
+    phone_hrs: Number(document.getElementById("phoneUsage").value),
+    laptop_hrs: Number(document.getElementById("laptopUsage").value)
+  };
+
+      try {
+        const res = await fetch("/submit_activity", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) {
+          window.location.href = `result.html?email=${encodeURIComponent(email)}`;
+        } else {
+          alert("Failed to submit activity.");
+        }
+      } catch (err) {
+        alert("Error submitting activity.");
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
